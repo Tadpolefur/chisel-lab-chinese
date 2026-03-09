@@ -3,14 +3,19 @@
 ## - uncomment the lines corresponding to used pins
 ## - rename the used ports (in each line, after get_ports) according to the top level signal names in the project
 
+## 此文件是适用于 Basys3 rev B 的通用.xdc 文件
+## 要在工程中使用，请：
+## - 取消注释对应引脚的行
+## - 将使用的端口重命名（每行 get_ports 后面的部分），以与工程中的顶层信号名匹配
+
 set_property IOSTANDARD LVCMOS33 [get_ports *]
 
 
-## Clock signal
+## Clock signal 时钟信号
 set_property PACKAGE_PIN W5 [get_ports clock]
 create_clock -add -name sys_clk_pin -period 10.00 -waveform {0 5} [get_ports clock]
  
-## Switches
+## Switches 开关
 set_property PACKAGE_PIN V17 [get_ports {io_sw[0]}]					
 set_property PACKAGE_PIN V16 [get_ports {io_sw[1]}]					
 set_property PACKAGE_PIN W16 [get_ports {io_sw[2]}]					
@@ -29,7 +34,7 @@ set_property PACKAGE_PIN W17 [get_ports {io_sw[3]}]
 #set_property PACKAGE_PIN R2  [get_ports {sw[15]}]					
  
 
-## LEDs
+## LEDs LED灯
 set_property PACKAGE_PIN U16 [get_ports {io_led[0]}]					
 set_property PACKAGE_PIN E19 [get_ports {io_led[1]}]					
 set_property PACKAGE_PIN U19 [get_ports {io_led[2]}]					
@@ -48,7 +53,7 @@ set_property PACKAGE_PIN V19 [get_ports {io_led[3]}]
 #set_property PACKAGE_PIN L1  [get_ports {led[15]}]					
 	
 	
-##Buttons
+## Buttons 按钮
 #set_property PACKAGE_PIN U18 [get_ports btnC]						
 #set_property PACKAGE_PIN T18 [get_ports btnU]						
 #set_property PACKAGE_PIN W19 [get_ports btnL]						
@@ -58,7 +63,7 @@ set_property PACKAGE_PIN T17 [get_ports reset]
 #set_property PACKAGE_PIN U17 [get_ports btnD]						
 
 
-##7 segment display
+## 7 segment display 七段显示器
 #set_property PACKAGE_PIN W7 [get_ports {io_seg[0]}]					
 #set_property PACKAGE_PIN W6 [get_ports {io_seg[1]}]					
 #set_property PACKAGE_PIN U8 [get_ports {io_seg[2]}]					
@@ -73,7 +78,7 @@ set_property PACKAGE_PIN T17 [get_ports reset]
 #set_property PACKAGE_PIN W4 [get_ports {io_an[3]}]					
 
 
-##VGA Connector
+## VGA Connector VGA连接器
 #set_property PACKAGE_PIN G19 [get_ports {vgaRed[0]}]				
 #set_property PACKAGE_PIN H19 [get_ports {vgaRed[1]}]				
 #set_property PACKAGE_PIN J19 [get_ports {vgaRed[2]}]				
@@ -90,19 +95,19 @@ set_property PACKAGE_PIN T17 [get_ports reset]
 #set_property PACKAGE_PIN R19 [get_ports Vsync]						
 
  
-##USB-RS232 Interface
+## USB-RS232 Interface USB-RS232接口
 #set_property PACKAGE_PIN B18 [get_ports RsRx]						
 #set_property PACKAGE_PIN A18 [get_ports RsTx]						
 
 
-##USB HID (PS/2)
+## USB HID (PS/2)
 #set_property PACKAGE_PIN C17 [get_ports PS2Clk]						
 #set_property PULLUP true [get_ports PS2Clk]
 #set_property PACKAGE_PIN B17 [get_ports PS2Data]					
 #set_property PULLUP true [get_ports PS2Data]
 
 
-##Pmod Header JA
+## Pmod Header JA
 #set_property PACKAGE_PIN J1 [get_ports {JA[0]}]					
 #set_property PACKAGE_PIN L2 [get_ports {JA[1]}]					
 #set_property PACKAGE_PIN J2 [get_ports {JA[2]}]					
@@ -113,7 +118,7 @@ set_property PACKAGE_PIN T17 [get_ports reset]
 #set_property PACKAGE_PIN G3 [get_ports {JA[7]}]					
 
 
-##Pmod Header JB
+## Pmod Header JB
 #set_property PACKAGE_PIN A14 [get_ports {JB[0]}]					
 #set_property PACKAGE_PIN A16 [get_ports {JB[1]}]					
 #set_property PACKAGE_PIN B15 [get_ports {JB[2]}]					
@@ -130,7 +135,7 @@ set_property PACKAGE_PIN T17 [get_ports reset]
 #set_property PACKAGE_PIN C16 [get_ports {JB[7]}]
  
 
-##Pmod Header JC
+## Pmod Header JC
 #set_property PACKAGE_PIN K17 [get_ports {JC[0]}]					
 #set_property PACKAGE_PIN M18 [get_ports {JC[1]}]					
 #set_property PACKAGE_PIN N17 [get_ports {JC[2]}]					
