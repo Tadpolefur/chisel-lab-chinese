@@ -1,147 +1,129 @@
+# 工具安装指南
 
-# Tool Setup
+本文档介绍了如何在 Linux/Ubuntu 和 Windows 上安装所有工具，如下是所要安装的工具一览：
 
-This documents describes how to setup all tools on Linux/Ubuntu
-and on Windows.
-Here is a summary of the tools we need:
-
- * [Java OpenJDK 8 or later (up to 21)](https://adoptopenjdk.net/)
+ * [版本高于 8 但不高于 21 的 Java OpenJDK](https://adoptopenjdk.net/)
  * [sbt](https://www.scala-sbt.org/)
- * [IntelliJ](https://www.jetbrains.com/idea/download/) (the free Community version)
- * Vivado (e.g. 2023.1)
+ * [IntelliJ](https://www.jetbrains.com/idea/download/) （免费的社区版）
+ * Vivado（如 2023.1 版本）
    * Windows: https://www.xilinx.com/member/forms/download/xef.html?filename=Xilinx_Unified_2023.1_0507_1903_Win64.exe
    * Linux: https://www.xilinx.com/member/forms/download/xef.html?filename=Xilinx_Unified_2023.1_0507_1903_Lin64.bin
  * [GTKWave](http://gtkwave.sourceforge.net/)
- * make, git (for command line usage) (alternatively, a GUI Git client, see the section further down)
+ * make, git（使用命令行，或者带用户界面的Git客户端，见下文详述）
 
-## Ubuntu Virtual Machine
+## Ubuntu 虚拟机
 
-The easiest way to get all tools installed is to use the Ubuntu virtual machine provided at:
+最简单的安装所有工具的方法是使用如下链接提供的 Ubuntu 虚拟机：
 
  * [Ubuntu VM](https://patmos-download.compute.dtu.dk/de2lab.ova)
 
-The user is ```de2lab``` and the password is ```de2lab```. You need the free [Virtual Box](https://www.virtualbox.org/wiki/Downloads)
-for this virtual machine. Note, that this VM is BIG. The downloaded file is 43 GB and the extracted virtual machine fills around 77 GB.
+使用用户名 ```de2lab``` 和密码 ```de2lab```登录。你需要安装免费的 [Virtual Box](https://www.virtualbox.org/wiki/Downloads)
+来运行该虚拟机。注意，虚拟机文件**非常大**，需要下载43GB的文件，而解压后的虚拟机大约占用77GB的空间。
 
-Use the *File* >> *Import Appliance...* option in Virtual Box, to extract the virtual machine from the image. Then start the virtual machine. 
-In order to bridge the USB connection to your FPGA into the virtual machine, go to *devices* >> *USB* in the top of the virtual machine window 
-and select the FPGA in the menu.
-
+使用 Virtual Box 的 *File* >> *Import Appliance...* 选项以解压虚拟机镜像，然后启动虚拟机。使用虚拟机窗口顶端的 *devices* >> *USB* 选项并选择菜单中的 FGPA 以将你的 FPGA 通过 USB 连接到虚拟机。
 
 ## Chisel
 
-Chisel is *just* a library for Scala. And Scala is just a language that executes
-on the Java virtual machine (JVM) and uses the Java library. Therefore, you need to have
-[Java OpenJDK 8 or later (max 21)](https://adoptopenjdk.net/) installed on your laptop.
+Chisel 是 Scala 语言的一个库，而 Scala 是运行在 Java 虚拟机 (JVM) 上并使用 Java库的一种语言。因此，你需要在你的计算机上安装
+[版本高于 8 但不高于 21 的 Java OpenJDK](https://adoptopenjdk.net/)。
 
-For working on the command line you should also install
-[sbt](https://www.scala-sbt.org/), the Scala build tool.
-Please note that installing sbt will make the IntelliJ-build process a lot easier as well.
+你需要安装 Scala 构建工具 [sbt](https://www.scala-sbt.org/) 以使用命令行构建 Chisel 项目，
+请注意安装 sbt 也可以使 IntelliJ 构建流程变得更简单。
 
-A nice editor for Chisel/Scala is
-[IntelliJ](https://www.jetbrains.com/idea/download/). At the first start
-of IntelliJ download the Scala plugin (at Download featured plugins).
+[IntelliJ](https://www.jetbrains.com/idea/download/) 是一个不错的 Chisel/Scala 编辑器，首次启动时需要在“下载推荐插件（Download featured plugins）”处下载 Scala 插件。
 
 ## Vivado
+
+Vivado 是 Xilinx 公司为 Basys3 FPGA 开发板提供的综合工具，其免费版本可从以下链接下载：
+https://www.xilinx.com/products/design-tools/vivado/vivado-webpack.html
 
 Vivado is the synthesize tool from Xilinx for the Basys3 FPGA board.
 The WebPACK edition is freely available at:
 https://www.xilinx.com/products/design-tools/vivado/vivado-webpack.html
 
- * Download [Vivado WebPACK](https://www.xilinx.com/products/design-tools/vivado/vivado-webpack.html)
-   * You need to register with Xilinx
-   * To save some space you can deselect all devices except Artix-7
- * For Linux the installer executable can be run with ```bash Xilinx...```
-   * see
-     [Digilent Installation](https://reference.digilentinc.com/vivado/installing-vivado/start)
-     for instructions
- * Install cable drivers and Digilent board files (according to the above instructions)
+ * 下载 [Vivado WebPACK](https://www.xilinx.com/products/design-tools/vivado/vivado-webpack.html)
+   * 你需要注册 Xilinx
+   * 为了节省空间，可以不选择除 Artix-7 之外的其他设备
+ * 对于 Linux，可运行安装程序 ```bash Xilinx...```
+   * 参见 [Digilent 安装说明](https://reference.digilentinc.com/vivado/installing-vivado/start)
+ * 根据上述说明安装 USB 驱动程序和 Digilent 板文件
 
 ## Ubuntu/Linux
 
-This is the log when I prepared the Ubuntu virtual machine for the DE 2 lab. It may be helpful to setup
-your Linux system for the DE 2 lab.
+这是我为 DE 2 实验室准备的 Ubuntu 虚拟机的安装日志。这些说明可能对你设置 Linux 系统有所帮助。
 
- * Install Ubuntu 18.04 LTS, max disc set to 80 GB and 4 GB for memory
+ * 安装 Ubuntu 18.04 LTS，最大磁盘空间设置为 80 GB，内存设置为 4 GB。
  * uid: de2lab, pwd: de2lab
- * Set time and time zone (important for further installation!)
- * Settings - Power - Blank screen: never, Privacy - Aut. Screen Lock - OFF
- * Copy the chisel book onto the desktop
-   * That is my current snapshot
- * Install Vivado (in home folder)
-   * Install cable drivers
-   * Get digilent board definitions
- * Install Java JDK and other tools with:
- * ```sudo apt install openjdk-8-jdk git make gtkwave```
- * Install sbt according to the instructions from [sbt download](https://www.scala-sbt.org/download.html)
- * Install IntelliJ and the Scala plugin with a launch shortcut in favorites
- * Shortcut to GtkWave on desktop
+ * 设置时间和时区，这对后续的安装至关重要！
+ * 进入 `设置-电源` 设置 `黑屏：永不`，`隐私：自动` 和 `锁定：关闭` 
+ * 将 Chisel 书籍复制到桌面上
+   * 这是我当前的快照
+ * 在主目录下安装 Vivado
+   * 安装接线驱动程序
+   * 获取 Digilent 开发板定义文件
+ * 使用以下指令安装 Java JDK 和其他工具：
+   * ```sudo apt install openjdk-8-jdk git make gtkwave```
+ * 按照 [sbt 下载](https://www.scala-sbt.org/download.html) 的说明安装 sbt
+ * 安装 IntelliJ 和 Scala 插件，并在收藏夹中创建快捷方式
+ * 在桌面上创建 GtkWave 的快捷方式
 
-Instead of running the apt commands manually you can also run the provided ```setup.sh```.
+除了手动运行 ```apt``` 命令之外，你也可以运行提供的 ```setup.sh``` 脚本。
 
 ## Windows 10
 
- * Install Vivado (see above) and the Digilent board files
- * Install OpenJDK 8 or later (up to 17) from [AdoptOpenJDK](https://adoptopenjdk.net/)
- * Install [sbt](https://www.scala-sbt.org/)
- * Install [IntelliJ](https://www.jetbrains.com/idea/download/)
-   * The community edition
-   * Include Create Desktop Shortcut
- * Start IntelliJ to finish the setup
-   * Select the light UI theme (if you prefer)
-   * On the featured plugins select Install for Scala
-   * When importing a project, select the JDK you installed before
-     * On Project JDK select *New*
-     * Select *JDK*
-     * Select the path to your OpenJDK 8 installation, usually something like ```C:\Program Files\AdoptOpenJDK\jdk-8.0.232.09-hotspot\```
- * Download the [GTKWave binaries](https://sourceforge.net/projects/gtkwave/files/)
-   * Select the latest release that matches the pattern ```gtkwave-{release number}-bin-win32```
-   * Extract the downloaded ```.zip``` into a directory of choice
-   * Run the executable ```gtkwave.exe``` in the folder ```gtkwave\bin\```
-   * Put a link to the executable on the desktop
- * Copy the PDF of the [Chisel Book](http://www.imm.dtu.dk/~masca/chisel-book.html) on the desktop
- * Install a [git client](https://git-scm.com/download/win)
-	* If you have no prior experience using git, check the followings links for an introduction to the git workflow and the advantages of version-control systems. [1](https://www.youtube.com/watch?v=SWYqp7iY_Tc), [2](https://www.freecodecamp.org/news/what-is-git-and-how-to-use-it-c341b049ae61/). 
-	Do note that most git tutorials emphasize command line usage, but this is by no means a must. There exist several great GUI git clients, examples of which are [Github Desktop](https://desktop.github.com/) and [Fork](https://fork.dev/).
- 
+ * 按上述说明安装 Vivado 和 Digilent 开发板文件
+ * 安装 [版本高于 8 但不高于 17 的 Java OpenJDK](https://adoptopenjdk.net/)
+ * 安装 [sbt](https://www.scala-sbt.org/)
+ * 安装 [IntelliJ](https://www.jetbrains.com/idea/download/)
+   * 社区版
+   * 创建桌面快捷方式
+ * 启动 IntelliJ 完成安装
+   * 如果你喜欢的话，选择浅色 UI 主题
+   * 在推荐插件中选择安装 Scala 插件
+   * 导入项目时，选择你安装的 JDK
+     * 在项目 JDK 选择 *New*
+     * 选择 *JDK*
+     * 选择你的 OpenJDK 8 安装路径，一般在类似 `C:\Program Files\AdoptOpenJDK\jdk-8.0.232.09-hotspot\` 的位置
+ * 下载 [GTKWave 二进制文件](https://sourceforge.net/projects/gtkwave/files/)
+   * 选择与 `gtkwave-{release number}-bin-win32` 匹配的最新版本
+   * 解压下载的 `.zip` 文件到任意目录
+   * 在 `gtkwave\bin\` 目录运行 `gtkwave.exe`
+   * 在桌面创建快捷方式
+ * 把 [Chisel Book](http://www.imm.dtu.dk/~masca/chisel-book.html) 复制到桌面上
+ * 安装 [git 客户端](https://git-scm.com/download/win)
+   * 如果你对 git 还不熟悉，可以参考以下链接了解 git 的工作流程和版本控制系统的优势。[1](https://www.youtube.com/watch?v=SWYqp7iY_Tc), [2](https://www.freecodecamp.org/news/what-is-git-and-how-to-use-it-c341b049ae61/)。注意绝大多数 git 教程强调使用命令行，但是这并不意味着必须如此。存在很多优秀的图形化 git 客户端，例如 [Github Desktop](https://desktop.github.com/) 和 [Fork](https://fork.dev/)。
 
-The installation can be checked with the first exercise in the lab. Or a quick, partial
-check with following commands in the Windows Powershell:
+实验中的第一个联系可以验证安装的正确性。或者你可以在 `Windows PowerShell` 中快速测试以下指令：
 
 ```
 javac
 sbt
 ```
 
-## macOS
+## Intel 芯片架构的 Mac
 
-Vivado is not supported under macOS, however, the Chisel tool flow runs fine
-on the Mac. You can simulate your design on the Mac and use a virtual machine
-(e.g., with Ubuntu) to synthesize your design with Vivado.
+Vivado 在 macOS 上不可用，但是 Chisel 在 Mac 上运行良好。你可以在你的 Mac 设备上进行设计的模拟，然后使用如 Ubuntu 等虚拟机来运行 Vivado 进行综合。
 
- * Install OpenJDK 8 or later (up to 17) from [AdoptOpenJDK](https://adoptopenjdk.net/)
- * Install sbt with ```brew install sbt```
- * Install [GTKWave](http://gtkwave.sourceforge.net/)
-   * For MacOS 14 following installation is possible:
+ * 安装 [版本高于 8 但不高于 17 的 Java OpenJDK](https://adoptopenjdk.net/)
+ * 使用 `brew install sbt` 安装 sbt
+ * 安装 [GTKWave](http://gtkwave.sourceforge.net/)
+   * 对于 macOS 14，可以按照以下方式安装：
    * `brew install --HEAD randomplum/gtkwave/gtkwave`
-   * see [this issue](https://github.com/gtkwave/gtkwave/issues/250)
- * Install [IntelliJ](https://www.jetbrains.com/idea/download/)
-   * The community edition
-   * Include Create Desktop Shortcut
- * Start IntelliJ to finish the setup
-   * Select the light UI theme (if you prefer)
-   * On the featured plugins select Install for Scala
-   * When importing a project, select the JDK you installed before
-     * On Project JDK select *New*
-     * Select *JDK*
-     * Select the path to your OpenJDK installation
+   * 参见 [这个问题](https://github.com/gtkwave/gtkwave/issues/250)
+ * 安装 [IntelliJ](https://www.jetbrains.com/idea/download/)
+   * 社区版
+   * 创建桌面快捷方式
+ * 在 IntelliJ 中完成安装
+   * 如果你喜欢的话，选择浅色 UI 主题
+   * 在推荐插件中选择安装 Scala 插件
+   * 导入项目时，选择你安装的 JDK
+     * 在项目 JDK 选择 *New*
+     * 选择 *JDK*
+     * 选择你的 OpenJDK 安装路径
 
+## Arm 芯片架构的 Mac (M1, M2, 和 M3)
 
-## Mac with Arm chip (M1, M2, or M3)
+ * 参考 [MacM1.md](MacM1.md) 在 Arm 架构芯片的 Mac 上安装 Vivado。
 
- * To run Vivado on a Mac with an Arm chip see [MacM1.md](MacM1.md).
-
-## Common Error
-
-Here we collect common issues when installing the tools. Also refer to the [FAQ](FAQ.md)
-
+## 常见问题
+请参考 [FAQ](FAQ.md)
