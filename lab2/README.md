@@ -1,89 +1,79 @@
-# Lab 2: Combinational Circuits in Chisel
+# 实验二：Chisel 组合逻辑电路
 
-The lab session will show you how to describe combinational circuits
-with Chisel. You get modules, where you need to add the description of
-combinational circuits. You will run unit tests to test your circuit.
-Optional you can also synthesize your circuit for an FPGA and test it
-with the FPGA board.
+本实验课程将介绍使用 Chisel 语言描述组合逻辑电路的基本方法。
+在本实验中，你将在一些预设的模块中添加组合逻辑电路的描述，然后在其上运行单元测试。
+可选地，你还可以将你的电路综合到 FPGA 板上，并在 FPGA 板上测试它。
 
-Having the tests before the implementation is called test driven
-development and is common in software development, but it is also good practice
-in hardware design. This time the tests are given to you, in a later lab session
-you will write your own tests.
+在执行前进行测试被称作“测试驱动开发（test driven development）”，
+这在软件开发中很常见，但也是很好的硬件开发实践。
+测试用例在本课程中将直接给出，而在后续课程中需你要自行编写。
 
-After the lab you will know how to use the few constructs to describe
-common combinational building blocks, such as mulitplexer, encoder,
-decoder, and function tables in Chisel.
+本实验完成后，你将了解如何使用 Chisel 描述常见的组合逻辑，比如多路复用器、编码器、解码器、函数表等。
 
-We assume that you have downloaded the complete lab material from GitHub
-and it is placed in folder ```chisel-lab```.
+我们预设你已经下载了完整的实验材料，并将其放置在名为 `chisel-lab` 的文件夹中。
 
-## Background Reading
+## 背景阅读
 
- * This lab is loosely based on Chapter 2 and 5 of
-*[Digital Design with Chisel](http://www.imm.dtu.dk/~masca/chisel-book.html)*
+本实验大致基于 [Digital Design with Chisel](http://www.imm.dtu.dk/~masca/chisel-book.html) 的第二和第五章。
 
-## Compiling and Testing of Combinational Circuits
+## 编译和测试组合逻辑电路
 
-Today's lab topic is to describe selected combinational building blocks in Chisel.
-We provide the testing code for your circuits. You have completed all exercises
-when all tests (run with ```sbt test```) complete without an error.
+今天的实验课程主题是描述 Chisel 中选定的组合逻辑构建块。
+我们为你的电路提供了测试代码，当你使用 `sbt test` 通过了所有测试时而不报任何错误时，便视为完成了所有练习。
 
-With IntelliJ import the lab2 project as follows:
+使用如下步骤将实验二项目导入到 IntelliJ 中：
 
- * Start IntelliJ
- * Click *Import Project*, or on a running IntelliJ: *File - New -
-Project from Existing Source...*
- * Navigate to ```.../chisel-lab/lab2``` and select the file ```build.sbt```, press *Open*
- * Make sure to select a JDK 1.8 or later
- * Press OK on the next dialog box
+ * 启动 IntelliJ
+ * 如果这是你第一次启动 IntelliJ，点击 *导入项目*，否则选择 *文件 - 新建 - 现有源中的项目*
+ * 选择 *sbt*
+ > 译注：该选项在“从外部模型导入项目”下
+ * 移动到 `.../chisel-lab/lab1` 目录下并选择 `build.sbt` 文件，点击 *下一步*
+ * 在 *项目 JDK* 中选择高于1.8的JDK版本
+ * 点击 *创建*
  
-### A Majority Voter
+### 多数决投票器
 
-We start as first exercise with a relative simple circuit, a majority voter.
+第一个练习是完成一个相对简单的多数决投票器。
 
-Navigate to the Chisel component ```Majority``` by following in the Project navigator along: *lab2 - src - main - scala - Majority*.
-Open ```Majority``` with a double click.
+Chisel 组件 `Majority` 位于 `lab2/src/main/scala/Majority` 文件夹中，双击打开它。
 
-This is a Chisel component that shall implement the majority voting of three
-signals (```a```, ```b```, and ```c```). Majority voting means that the output of
-the circuit is the majority of the inputs, e.g., if ```a==1```, ```b==0```, and
-```c==1``` the result shall be ```1```. See Dally 3.6 for a solution in VHDL.
-Your task is to implement that circuit in Chisel.
+这个 Chisel 组件应实现三个信号（`a`, `b` 和 `c`）的多数决投票。
+多数决意味着，电路输出的结果应该是输入信号中出现次数最多的值，例如：
+如果 `a==1, b==0, c==1` ，输出的结果就应该是 `1` 。
+参见 Dally 3.6 节的解决方案。
+> 译注：这里的 Dally 应该是 William J . Dally 的教材 《Digital Design Using VHDL: A Systems Approach》，非开源书籍，请自行购买或借阅。
 
+在 Intellij 窗口底部的终端中，运行以下命令：
 
-Open the terminal at the bottom of the IntelliJ window and run:
 ```
 sbt test
 ```
-to compile and test your project.
 
-In the *Run* window, you should see several tests failing, similar to:
+以编译和测试你的项目。
+
+在“运行”窗口中，你会看到一些测试失败信息，类似于：
+
 ```
 [info] Suites: completed 7, aborted 0
 [info] Tests: succeeded 2, failed 5, canceled 0, ignored 0, pending 0
 [info] *** 5 TESTS FAILED ***
 ```
 
-For the majority circuit, we provide three *tests*:
+我们为多数决电路设置了三个*测试用例*：
 
- 1. ```MajorityPrinter```: A test that simply prints the logic table of the
-   circuit. This form of test is helpful for debugging, but not for
-   automated regression tests.
- 1. ```MajoritySimple```: A too simple test that covers only some cases
-   and will succeed for the too simple default implementation. This shows
-   you that testing can usually not guarantee a 100% correct solution.
- 1. ```MajorityFull```: is an exhaustive tester that covers all possibilities.
-   This is the best form of a tester. However, exhaustive testing is only
-   possible for very simple circuits.
+ 1. 打印测试 `MajorityPrinter` ：简单打印出电路的逻辑表，对纠错很有用，但不适合自动化回归测试。
+ 1. 简单测试 `MajoritySimple` : 一个仅涵盖了部分案例的简单测试，对于默认实现来说很简单。
+   这意味着测试往往不能保证百分百正确的解决方案。
+ 1. 全量测试 `MajorityFull`: 这是一个涵盖了所有输入可能性的详尽测试，也往往是最好的测试形式。
+   然而，详尽的测试仅在非常简单的电路上有实现性。
    
-You run a single test with following command in the terminal window:
+你可以在终端窗口运行以下命令，执行指定的单元测试：
 
 ```
 sbt "testOnly MajorityPrinter"
 ```
 
-Run the ```MajorityPrinter``` and watch the printout of the logic table:
+运行 `MajorityPrinter` 来查看逻辑表输出：
 
 ```
 Logic table for Majority
@@ -106,123 +96,112 @@ true true true -> 1
 [info] All tests passed.
 ```
 
-This shows that the default implementation just copies the value of ```a```
-to the output. Clearly not a majority circuit. Change the Majority component
-to implement the majority circuit. You can watch the logic table for debugging.
-However, at the end run:
+这个输出显示了原始的代码执行情况，只将输入 `a` 的值简单复制到了输出端。
+显然，这不是一个多数决电路。请修改 `Majority` 组件，实现多数决电路。
+你可以使用逻辑表来调试，并在代码编写完成后，运行以下命令：
+
 ```
 sbt "testOnly MajorityFull"
 ```
-to make sure you have completed this exercise.
-   
 
-### Optional: Generating Hardware
+来验证你通过了本实验。
 
-In lab1 you have learned how to generate hardware to run in an FPGA.
-In the current lab exercise you use testing to run your combinational circuit.
-However, we can also run those circuits on the FPGA board and use switches
-and LEDs to test the circuits.
+### 选做：生成硬件
 
-Generate the Verilog description by running the Majority App with:
+在实验一中，你已经学会了如何生成在 FPGA 上运行的硬件；而本实验中，你将使用测试来运行你的组合逻辑电路。
+此外，我们也可以在FPGA板上运行这些电路，并使用开关和 LED 灯来测试电路。
+
+使用以下命令运行 `Majority` 应用以生成 Verilog 代码：
+
 ```
 sbt run
 ```
-If there are more than one App in a project, you need to select which one
-to run, the ```Majority```. Like the test cases, you can also directly
-select which App to run by:
+
+如果项目中又不止一个应用，你需要选择运行的目标，这里选择 `Majority`。
+和测试一样，你可以这样指定运行哪个应用：
+
 ```
 sbt "runMain Majority"
 ```
 
-Create a Xiling Vivado project with the source file ```Majority.v``` and
-the constraint file ```majority.xdc``` that includes the pin definitions.
-Synthesize and implement the design, create the bitstream, configure the
-FPGA, and test the device with the three switches ```sw0```, ```sw1```,
-and ```sw2```.
+创建一个 Xilinx Vivado 项目，使用 `Majority.v` 作为源文件，`majority.xdc` 作为约束文件，其中包含引脚定义。
+综合并实现设计，创建比特流，配置 FPGA，并使用三个开关 `sw0`、`sw1` 和 `sw2` 测试设备。
 
-Although testing in real hardware gives confidence that the design works
-it has two drawbacks: (1) synthesizing, even a small design, consumes a
-considerable amount of time and (2) it is manual.
-With tests written in Chisel the testing is faster and easier to reproduce
-and automate.
+虽说使用真实的硬件测试设计是否正常工作可信度高，但这种方法有两个缺陷：
+（1）综合——即使是小型的设计——会耗费大量时间；
+（2）无法脱离手动工作。
+相对而言，使用 Chisel 编写的测试可以更快、更容易复现和自动化。
 
-### A Multiplexer (Mux)
+### 多路复用器（Mux）
 
 ![Mux](../figures/mux.svg)
 
-A multiplexer selects between different input signals. In the above figure
-it is a 2:1 multiplexer. With ```sel``` we route either input ```a``` or
-input ```b``` to output ```y```. We assume in this example that ```a```
-is selected when ```sel``` is ```0``` or ```false```, otherwise  ```b```.
 
-Open the ```Mux2``` component to implement the multiplexer.
-You can test your implementation with:
+多路复用器对不同的的输入进行选择，如上图是一个 2:1 多路复用器。
+我们使用 `sel` 输入信号决定 输出端 `y` 连接到输入端 `a` 还是 `b`。
+本案例中，我们假使当 `sel` 为 `0` 或 `false` 时，`a` 被选中，否则 `b` 被选中。
+
+打开 `Mux2` 组件以完成多路复用器，你可以使用以下命令来测试你的实现：
+
 ```
 sbt "testOnly Mux2Spec"
 ```
 
-A low-level solution would be to describe the multiplexing function
-as Boolean equation, such as ```(!sel & a) | (sel & b)```.
-This is correct (try it in ```Mux2```), but hard to read.
-Furthermore, this equation does not work so easily with multi-bit
-values.
+一种底层的解决方案是用布尔方程来描述多路复用器，形如 `(!sel & a) | (sel & b)` 。
+这也是对的，你可以在 `Mux2` 中尝试，但易读性很差。
+此外，布尔方程不能很好地处理多位值。
 
-A better solution is to conditional assignment, in Chisel
-with ```when``` and ```.otherwise```.
-Look it up in Chapter 5 of the Chisel book and implement the
-Multiplexer.
+更好的解决方案是使用条件赋值，在 Chisel 中对应着 `when` 和 `.otherwise` 。
+在 `the Chisel book` 的第五章查阅相关内容，并实现多路复用器。
 
-As multiplexing is such a fundamental operation, that Chisel
-provides a multiplexer component ```Mux```.
-Implement you final version of a multiplexer by using the ```Mux```
-component.
+由于多路复用是非常基础的操作，Chisel 提供了 `Mux` 组件。
+使用 `Mux` 组件实现最终版的多路复用器。
 
-The *cool* thing on the ```Mux``` component is that it can multiplex
-arbitrary complex data structures, not just a vector of bits.
-Any user defined data type will work with ```Mux```.
+非常*炫酷*的是，`Mux` 组件可以对任意复杂的数据结构进行多路复用，而不仅仅是位向量。
+任何用户定义的数据类型都适用于 `Mux` 。
 
-### A Decoder
+### 解码器
 
 ![Decoder](../figures/decoder.svg)
 
-The next exercise is to describe a 2-bit decoder. The test is called
-as follows:
+下一个练习是描述一个 2 比特解码器，以下是其测试方法：
 
 ```
 sbt "testOnly DecoderSpec"
 ```
 
-You can find the skeleton of the exercise in ```Decoder.scala```.
-Fill in the missing statement(s). A Chisel ```switch``` statement is probably
-the most elegant solution, but other solutions are valid as well.
+你可以在 `Decoder.scala` 中找到练习的框架，并补全其中缺失的语句。
+使用 Chisel 的 `switch` 语句可能是最优雅的解决方案，也可以尝试其他有效解法。
 
-### Addition/Subtraction Circuit
+### 加减法电路
 
-In the next exercise you have to build a small arithmetic circuit.
-The circuit shall be able to add or subtract two unsigned integer.
-One input (```selAdd```) decides if the two numbers are added or
-subtracted (sounds like a multiplexer). The test is called as:
+接下来的练习中，你要构建一个小型的算术电路，它可以对两个无符号整数进行加减。
+输入端 `selAdd` 决定两个数是相加还是相减（类似于一个多路复用器）。
+测试方法如下：
 
 ```
  sbt "testOnly AddSubSpec"
 ```
 
-The file for your solution is ```AddSub```.
+你需要在 `AddSub` 文件中实现加减法电路。
 
-### A Maximum Finder
+### 最大值查找器
 
-The next exercise is to build a circuit that finds the maximum
-among four unsigned integers. The test for this module is called as:
+接下来的练习是搭建一个查找四个无符号整数中的最大值的电路。
+测试方法如下：
 
 ```
  sbt "testOnly MaxFinderSpec"
 ```
 
-A skeleton for a solution can be found in  ```MaxFinder.scala```. You will have to use multiplexers to select between the four inputs `a`, `b`, `c`, and `d`. Use the `Mux(sel, trueCase, falseCase)` function. Each time you use `Mux`, you create a new multiplexer; how many do you need to find the largest number? To compare two numbers, you can use the greater-than operator `>`. What kind of circuit does this create, and how many comparators are needed?
+你会在 `MaxFinder.scala` 中找到练习的框架。
+你需要使用多路复用器来选择四个输入中的最大值，尝试使用 `Mux(sel, trueCase, falseCase)` 函数。
+你每次使用 `Mux` 时都会新建一个多路复用器，需要几个多路复用器来找到最大值？
+你可以使用 `>` 来比较两个数，这会创建什么样的电路，又需要多少个比较器呢？
 
-#### Optional: Providing the index of the Maximum
+#### 选做：提供最大值的索引
 
-As an optional exercise, you can extend the maximum finder to also
-provide the index of the maximum value. For example, if input `c`
-is the largest value, the output index shall be `2` (assuming
-`a` has index `0`, `b` index `1`, `c` index `2`, and `d` index `3`). What additional resources do you need to provide this functionality? To check your behavior, you can modify the existing test `MaxFinderSpec` to also check the index output. Adding the index adds some ambiguity: what if two or more inputs have the same maximum value? 
+作为可选的练习，你可以扩展最大值查找器，使其提供最大值的索引。
+例如，如果输入 `c` 是最大值，输出的索引应为 `2` （我们假定 `a` 的索引为 `0`，`b` 的索引为 `1`，`c` 的索引为 `2`，`d` 的索引为 `3`）。
+这个功能需要什么额外的资源？你可以使用 `MaxFinderSpec` 中的现有测试来验证你的行为。
+添加索引会带来一些不确定性：如果两个或多个输入有相同的最大值，输出的索引应该是哪个？

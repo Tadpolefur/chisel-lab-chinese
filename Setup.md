@@ -5,6 +5,7 @@
  * [版本高于 8 但不高于 21 的 Java OpenJDK](https://adoptopenjdk.net/)
  * [sbt](https://www.scala-sbt.org/)
  * [IntelliJ](https://www.jetbrains.com/idea/download/) （免费的社区版）
+   > 译注：中文官网社区版请前往 [IntelliJ IDEA | 其他版本](https://www.jetbrains.com.cn/idea/download/other/)
  * Vivado（如 2023.1 版本）
    * Windows: https://www.xilinx.com/member/forms/download/xef.html?filename=Xilinx_Unified_2023.1_0507_1903_Win64.exe
    * Linux: https://www.xilinx.com/member/forms/download/xef.html?filename=Xilinx_Unified_2023.1_0507_1903_Lin64.bin

@@ -1,53 +1,44 @@
-# Lab 1: Hello World in Chisel
+# 实验一：你好，Chisel
 
-The lab session will show you a Hello World example (a blinking LED) in Chisel.
-We will explore the tools needed for the Chisel based design flow.
+本实验课会使用闪烁LED灯的案例，展示 Chisel 工具链的使用和设计工作流的运行方式。
 
-After the lab you will have a good overview of the tools used to
-edit and compile a hardware design coded in Chisel.
-You will be able to synthesize this design and configure the FPGA board.
+完成试验后，你将对使用 Chisel 编码的硬件设计所用到的编辑和编译工具有全面的了解。
+你将能够综合该设计，并配置 FPGA 板。
 
-We assume that you have downloaded the complete lab material from GitHub
-and it is placed in folder ```chisel-lab```.
+我们假设你已经从 GitHub 下载了完整的实验材料，并将其放置在文件夹 `chisel-lab` 中。
 
-## Background Reading
+## 背景阅读
 
- * This lab is loosely based on Chapter 1 of
-*[Digital Design with Chisel](http://www.imm.dtu.dk/~masca/chisel-book.html)*
+本实验大致基于 [Digital Design with Chisel](http://www.imm.dtu.dk/~masca/chisel-book.html) 的第一章。
 
-## Exploring and Compiling the Hello World Component
+## 探索和编译 Hello World 组件
 
-With IntelliJ import the lab1 project as follows:
+在 IntelliJ 中使用以下步骤导入实验一项目文件：
+ * 启动 IntelliJ
+ * 如果这是你第一次启动 IntelliJ，点击 *导入项目*，否则选择 *文件 - 新建 - 现有源中的项目*
+ * 选择 *sbt*
+ > 译注：该选项在“从外部模型导入项目”下
+ * 移动到 `.../chisel-lab/lab1` 目录下并选择 `build.sbt` 文件，点击 *下一步*
+ * 在 *项目 JDK* 中选择高于1.8的JDK版本
+ * 点击 *创建*
 
- * Start IntelliJ
- * When you start IntelliJ the first time, click *Import Project*, otherwise select *File - New - Project from Existing Sources...*
- * Select *sbt*
- * Navigate to ```.../chisel-lab/lab1``` and select the file ```build.sbt```, press *Open*
- * Select the JDK 1.8 (or later)
-   * On Project JDK select *New*
-   * Select *JDK*
-   * Select the path to your OpenJDK 8 installation, something like ```C:\Program Files\AdoptOpenJDK\jdk-8.0.232.09-hotspot\'''
- * Press OK on the next dialog box
+第一次导入项目可能需要一些时间，因为 Scala 和 Chisel 文件需要下载，请耐心等待。
 
-This importing from the project may take some time at the first import, as Scala and Chisel files need to be downloaded. Wait until it is finished.
+> 如果你已经打开了一个 IntelliJ 项目，你可以使用：
+> *文件 - 新建 - 现有源中的项目*
 
-> If you have an IntelliJ project already open, you can create a new project with:
-> *File - New - Project from Existing Sources...*
+然后在项目导航器中依次选择 *lab1 - src - main - scala - Hello*，双击打开 ```Hello```。
 
-Then navigate to the Chisel component ```Hello``` by following in the Project navigator along: *lab1 - src - main - scala - Hello*. Open ```Hello``` with a double click.
+这是一个完整的 Chisel 组件，包括生成一个较慢的逻辑时间，以便利用 Basys3 开发板的 100 MHz 时钟来驱动 LED 以 1 Hz 的频率闪烁。
+不要被 20 行这么长的代码吓到，你很快就能理解其中的细节。今天的实验主题是让工具流运行到配置 FPGA 板的阶段。
 
-This is a complete Chisel component including generation of a slower logical time
-to drive a blinking LED at 1 Hz from the 100 MHz clock from the Basys3 board.
-Do not get intimidated by those about 20 lines of code, you will soon understand the
-details. Today's lab topic is to get the tool flow working down to a configured FPGA.
+在 IntelliJ 窗口的底部打开终端，输入以下命令编译并运行项目：
 
-Open the terminal at the bottom of the IntelliJ window start the build process with:
 ```
 sbt run
 ```
-to compile and run your project.
+在 *运行* 窗口可以看到以下内容：
 
-In the *Run* window you should see something like:
 ```
 [info] Running HelloMain 
 Hello World, I will now generate the Verilog files!
@@ -56,97 +47,82 @@ Hello World, I will now generate the Verilog files!
 Total FIRRTL Compile Time: 916.6 ms
 [success] Total time: 22 s, completed Jul 22, 2019 11:09:25 AM
 ```
-This is the output of the Chisel compiler und runtime. To see that the program
-runs we provide a friendly greeting message, starting with the famous "Hallo World".
-If your design contains errors, you will see error messages in this window.
 
-Running the Chisel program generates a Verilog file (```Hello.v```) that we
-use for synthesizing our design for an FPGA. The content of this file is not
-important, but for curiosity you might open it right from within IntelliJ.
+这是 Chisel 编译器和运行时的输出。为了验证程序是否运行，我们使用著名的 “Hello World” 开头输出了一条友好的欢迎信息。
+如果你的设计存在错误，就会在此窗口看到错误信息。
 
-**CLI Alternative:**
+运行 Chisel 程序会生成 Verilog 文件（`Hello.v`），我们将使用它来为 FPGA 设计综合。
+这个文件的内容并不重要，但是你如果感兴趣，可以在 IntelliJ 中打开它。
 
-If you do not like to use an IDE, you can work at the command line
-(shell, terminal). Use a program editor of you choice and open ```Hello.scala```
-found at ```.../lab1/src/main/scala/Hello.scala```.
-You compile and run the *Hello World* in Chisel from the command line with a simple:
+**命令行界面替代方案：**
+
+如果你不喜欢用 IDE，也可以在 `shell` 或 `终端` 中使用命令行操作。
+使用你选择的文本编辑器打开 `.../lab1/src/main/scala/Hello.scala` 中的 `Hello.scala` 文件，然后在命令行中输入以下内容便可轻松编译并运行 *Hello World* 组件：
 
 ```bash
 sbt run
 ```
+**结束命令行界面替代方案**
 
-**End CLI Alternative**
+## 使用 Vivado 综合和配置 FPGA 板
 
-## Synthesizing and Configuring the FPGA with Vivado.
 
-We use the Xilinx tool
-[Vivado](https://www.xilinx.com/products/design-tools/vivado/vivado-webpack.html)
-to synthesize our design and configure the Basys3 board.
+我们使用 Xilinx 的 [Vivado](https://www.xilinx.com/products/design-tools/vivado/vivado-webpack.html) 工具来综合我们的设计，并配置 Basys3 开发板。
 
-The process is described in detail in the document
-*A digital circuit design flow guide  using VHDL and Xilinx Vivado
-targeting a Digilent BASYS 3 FPGA board* from last semester.
-Please use that document (from the first semester).
-The following list is only a brief summary.
+这一过程在上一学期的《A digital circuit design flow guide  using VHDL and Xilinx Vivado
+targeting a Digilent BASYS 3 FPGA board》中有详细描述，请使用该文档。以下仅为简单总结：
 
-### Vivado Project Creation
+### Vivado 项目创建
 
- * Open Vivado
- * Click *Create Project*
- * Click *Next*
- * Pick a name and a location and click *Next*
-   * You might place your project under ```chisel-lab/lab1```
- * Click *Next* to accept an *RTL Project*
- * In the next dialog box click *Add Files* and navigate to ```Hello.v``` and add it
- * At the *Add Constraints* dialog box clock *Add Files* and select
-   ```Basis3Hello.xdc``` and press *OK*.
-   * For the following labs you will need to edit the constraints file derived
-     from the Basys3 Master constraints file.
- * Click *Next*
- * In the *Default Part* dialog box select *Boards* and the *Basys3*, press *Next*
- * Press *Finish* to create the project
+ * 打开 Vivado
+ * 点击 *Create Project*
+ * 点击 *Next*
+ * 选择一个名称和位置，然后点击 *Next*
+   * 可以将你的项目放在 `chisel-lab/lab1` 目录下
+ * 点击 *Next* ，然后选择 *RTL Project*
+ * 在下一个对话框中点击 *Add Files* 并导航到 `Hello.v` 文件并添加它
+ * 在 *Add Constraints* 对话框中点击 *Add Files* 并选择
+   `Basis3Hello.xdc` 文件，然后点击 *OK*
+   * 对于接下来的实验，你需要编辑 `Basis3Hello.xdc` 文件，以配合 Basys3 主板的约束文件
+ * 点击 *Next*
+ * 在 *Default Part* 对话框中选择 *Boards* 和 *Basys3*，然后点击 *Next*
+ * 点击 *Finish* 创建项目
 
-### Synthesize and Configure the FPGA Board
+### 综合和配置 FPGA 板
 
-We are just a few clicks away from running our great *Hello World* design in
-the Basys3 board.
+只需几步便可将我们精彩的 *Hello World* 设计综合并配置到 Basys3 开发板。
 
- * Connect your Basis3 board with the USB cable to your laptop
- * Click on *Generate Bitstream* at the bottom of the *Project Manager* to
-   start synthesis, implementation, and bitstream generation
-   * This process may take some time (minutes)
- * Configure your FPGA with *Program Device* under *Open Hardware Manager*
-   * Open hardware manager after bitfile generation
-   * Open target, Auto Connect
-   * Program device
+ * 将 Basys3 开发板连接到你的电脑的 USB 接口
+ * 在 *Project Manager* 底部点击 *Generate Bitstream* 开始综合、实现和生成比特流
+   * 这个过程可能需要经过分钟级的时间
+ * 在 *Open Hardware Manager* 下配置 FPGA 板
+   * 打开硬件管理器后，打开目标，Auto Connect
+   * 点击 *Program Device* 进行设备编程
 
-You should now see an LED blinking at 1 Hz.
+你应该会看到 LED 开始以 1 Hz 的频率闪烁。
 
-**Congratulation! You have build your first digital design in Chisel**
+**恭喜！你已经用 Chisel 构建了你的第一个数字设计**
 
-After this lengthy setup, the next run of the design flow should be smooth.
-Try to change the ```CNT_MAX``` constant to a slightly smaller value
-(e.g., 50000000 instead of 100000000) to change the blinking frequency.
-Run the Chisel code in IntelliJ again and synthesize and configure again
-with Vivado. The LED should now blink at a different frequency.
-Faster or slower? At what frequency?
+在这漫长的初始化过程之后，下一次设计流程的运行应该会很顺利。
+试着改变常量 `CNT_MAX` 为一个稍小的值，比如将100000000改为50000000，来改变闪烁频率。
+再次运行 IntelliJ 中的 Chisel 代码，并重新综合和配置 Vivado 板。LED 应该现在以另一种频率闪烁。
+他变得更快还是更慢了，是什么频率？
 
-### Simulation Without an FPGA Board
+### 无 FPGA 板模拟
 
-If it happens that you do not have access to an FPGA board, you can run the
-blinking LED in simulation. To avoid to simulate for 100000000 clock cycles
-change the factor in ```Hello.scala``` on following line from:
+如果你没有可用的 FPGA 板，也可以运行闪烁 LED 的仿真。
+为了避免进行 100000000 次这个量级的的时钟周期仿真，在 `Hello.scala` 中把这一行
 
 ```
   val CNT_MAX = (100000000 / 2 - 1).U;
 ```
-to
+改成这样，
 ```
   val CNT_MAX = (50000 / 2 - 1).U;
 ```
-and run the simulation with
+然后使用以下命令运行仿真：
 ```
 sbt test
 ```
-You should see in the terminal a *simulation* of the blinking LED.
+你会在终端看到*模拟*的闪烁 LED 输出。
 
