@@ -9,6 +9,10 @@
 本实验基于 Martin Schoeberl 的教材
 [Digital Design with Chisel](http://www.imm.dtu.dk/~masca/chisel-book.html) 。
 
+> 译注：可以参考本书中文版[使用Chisel做数字设计](https://www.imm.dtu.dk/~masca/chisel-book-chinese.pdf)，GitHub仓库见 [chisel-book
+/chisel-book-chinese.tex
+](https://github.com/redpanda3/chisel-book/blob/master/chisel-book-chinese.tex)但该翻译最后一次更新为2020年6月版本（第二版，截至2026年3月，原书已更新至第六版），可能与最新特性产生差异，请严谨确认。
+
 [![Book Cover](figures/cover-small.jpg)](http://www.imm.dtu.dk/~masca/chisel-book.html)
 
 你可以通过如下方法使用该资料：
